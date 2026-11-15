@@ -42,6 +42,19 @@ if (!function_exists('asset')) {
     }
 }
 
+if (!function_exists('image_src')) {
+    function image_src(?string $value): string
+    {
+        if ($value === null || trim($value) === '') {
+            return asset('img/placeholder.svg');
+        }
+        if (preg_match('#^https?://#i', $value)) {
+            return $value;
+        }
+        return url($value);
+    }
+}
+
 if (!function_exists('redirect')) {
     function redirect(string $path): never
     {

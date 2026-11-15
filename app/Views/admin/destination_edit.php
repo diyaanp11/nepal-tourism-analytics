@@ -37,14 +37,8 @@
 
         <div class="mb-3">
             <label class="form-label">Image</label>
-            <?php 
-            $imgSrc = $dest['image'] ?? '';
-            if ($imgSrc && !preg_match('/^https?:\/\//', $imgSrc)) {
-                $imgSrc = url($imgSrc);
-            }
-            ?>
             <div style="margin-bottom: 1rem;">
-                <img src="<?= e($imgSrc ?: asset('img/placeholder.svg')) ?>" alt="Preview" style="max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" onerror="this.src='<?= asset('img/placeholder.svg') ?>'">
+                <img src="<?= image_src($dest['image']) ?>" alt="Preview" style="max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;" onerror="this.src='<?= asset('img/placeholder.svg') ?>'">
             </div>
             <input type="hidden" name="existing_image" value="<?= e($dest['image'] ?? '') ?>">
             

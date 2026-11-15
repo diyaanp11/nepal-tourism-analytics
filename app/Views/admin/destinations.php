@@ -4,6 +4,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Image</th>
                 <th>Destination Name</th>
                 <th>Region</th>
                 <th>Status</th>
@@ -13,6 +14,9 @@
         <tbody>
             <?php foreach ($destinations as $d): ?>
             <tr>
+                <td>
+                    <img src="<?= image_src($d['image']) ?>" alt="<?= e($d['name']) ?>" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" onerror="this.src='<?= asset('img/placeholder.svg') ?>'">
+                </td>
                 <td style="font-weight: 500;"><?= e($d['name']) ?></td>
                 <td><?= e($d['region_name'] ?? '—') ?></td>
                 <td>
@@ -39,7 +43,7 @@
             </tr>
             <?php endforeach; ?>
             <?php if (empty($destinations)): ?>
-                <tr><td colspan="4" class="text-center" style="color: #6c757d;">No destinations found.</td></tr>
+                <tr><td colspan="5" class="text-center" style="color: #6c757d;">No destinations found.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>

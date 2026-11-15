@@ -17,6 +17,9 @@ $userName = \App\Core\Session::get('user_name');
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($title ?? config('app.name')) ?> - <?= e(config('app.name')) ?></title>
     <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
+    <script>
+        window.APP_BASE = "<?= rtrim(url('/'), '/') ?>";
+    </script>
 </head>
 <body>
 
@@ -47,7 +50,6 @@ $userName = \App\Core\Session::get('user_name');
         </main>
     </div>
 
-    <!-- Custom Logout Modal -->
     <div class="modal-overlay" id="logoutModal">
         <div class="modal-box">
             <h3>Confirm Logout</h3>

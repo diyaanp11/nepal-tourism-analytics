@@ -7,11 +7,17 @@ use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Controllers\Admin\ImportController;
-use App\Controllers\Admin\DestinationController;
+use App\Controllers\Admin\DestinationController as AdminDestination;
 use App\Controllers\Admin\UserController;
 use App\Controllers\Admin\LogController;
 use App\Controllers\Researcher\DashboardController as ResearcherDashboard;
 use App\Controllers\Researcher\ExportController as ResearcherExport;
+use App\Controllers\Tourist\DashboardController as TouristDashboard;
+use App\Controllers\Tourist\PreferencesController;
+use App\Controllers\Tourist\FavouriteController;
+use App\Controllers\Tourist\DestinationController as TouristDestination;
+use App\Controllers\Tourist\ReviewController;
+use App\Controllers\Tourist\AjaxController;
 use App\Core\Router;
 use App\Core\View;
 
@@ -43,11 +49,11 @@ $import = new ImportController();
 $router->get('/admin/import', [$import, 'index']);
 $router->post('/admin/import/upload', [$import, 'upload']);
 
-$dest = new DestinationController();
-$router->get('/admin/destinations', [$dest, 'index']);
-$router->get('/admin/destinations/edit/{id}', [$dest, 'edit']);
-$router->post('/admin/destinations/update/{id}', [$dest, 'update']);
-$router->post('/admin/destinations/toggle/{id}', [$dest, 'toggleStatus']);
+$adminDest = new AdminDestination();
+$router->get('/admin/destinations', [$adminDest, 'index']);
+$router->get('/admin/destinations/edit/{id}', [$adminDest, 'edit']);
+$router->post('/admin/destinations/update/{id}', [$adminDest, 'update']);
+$router->post('/admin/destinations/toggle/{id}', [$adminDest, 'toggleStatus']);
 
 $user = new UserController();
 $router->get('/admin/users', [$user, 'index']);
@@ -63,6 +69,28 @@ $router->get('/researcher/dashboard', [$researcherDash, 'index']);
 
 $researcherExport = new ResearcherExport();
 $router->get('/researcher/export', [$researcherExport, 'exportCsv']);
+
+// Tourist Routes
+$touristDash = new TouristDashboard();
+$router->get('/tourist/dashboard', [$touristDash, 'index']);
+
+$prefs = new PreferencesController();
+$router->post('/tourist/preferences', [$prefs, 'save']);
+
+$fav = new FavouriteController();
+$router->post('/tourist/favourites/toggle/{id}', [$fav, 'toggle']);
+$router->get('/tourist/favourites', [$fav, 'index']);
+
+$touristDest = new TouristDestination();
+$router->get('/tourist/destination/{id}', [$touristDest, 'show']);
+
+$review = new ReviewController();
+$router->get('/tourist/reviews', [$review, 'index']);
+$router->post('/tourist/reviews/store/{id}', [$review, 'store']);
+$router->post('/tourist/reviews/delete/{id}', [$review, 'delete']);
+
+$ajax = new AjaxController();
+$router->get('/tourist/new-destinations', [$ajax, 'newDestinations']);
 
 // Normalize path
 $uri     = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';

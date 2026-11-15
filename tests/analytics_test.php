@@ -200,6 +200,43 @@ $result = $yoy->compute(140000, 100000);
 assert_eq('ok', $result['status'], 'Test 8: status');
 assert_close(40.0, $result['growth'], 0.001, 'Test 8: growth=40.0');
 
+echo "\n===== Recommender Reasons and Scores =====\n";
+$dests = [
+    ['id' => 1, 'name' => 'A', 'types' => [1, 2], 'type_names' => ['T1', 'T2'], 'best_months' => [10, 11], 'cost' => 4000.0, 'popularity_arrivals' => 100, 'avg_rating' => 4.5, 'review_count' => 1],
+    ['id' => 2, 'name' => 'B', 'types' => [1], 'type_names' => ['T1'], 'best_months' => [3, 4], 'cost' => 6000.0, 'popularity_arrivals' => 50, 'avg_rating' => null, 'review_count' => 0],
+    ['id' => 3, 'name' => 'C', 'types' => [], 'type_names' => [], 'best_months' => [10], 'cost' => 5000.0, 'popularity_arrivals' => 0, 'avg_rating' => 2.0, 'review_count' => 1],
+];
+$profile = ['interests' => [1, 2], 'budget' => 5000, 'travel_month' => 10];
+
+$engine = new \App\Services\Recommendation\MultiFactorRecommender();
+$res = $engine->recommend($dests, $profile, 5);
+
+assert_eq('ok', $res['status'], 'Test 9: status');
+assert_close(0.3308, $res['weights']['interest'], 0.001, 'Test 9: weight interest');
+assert_close(0.2903, $res['weights']['season'], 0.001, 'Test 9: weight season');
+assert_close(0.0037, $res['weights']['budget'], 0.001, 'Test 9: weight budget');
+assert_close(0.3308, $res['weights']['popularity'], 0.001, 'Test 9: weight popularity');
+assert_close(0.0444, $res['weights']['rating'], 0.001, 'Test 9: weight rating');
+
+$rA = $res['recommendations'][0];
+$rB = $res['recommendations'][1];
+$rC = $res['recommendations'][2];
+
+assert_eq(1, $rA['destination']['id'], 'Test 9: Rank 1 is A');
+assert_eq(100, $rA['match_percentage'], 'Test 9: A match %');
+assert_close(0.9956, $rA['final_score'], 0.001, 'Test 9: A final_score');
+assert_eq(['Matches your interest in T1, T2', 'Popular with visitors'], $rA['reasons'], 'Test 9: A reasons');
+
+assert_eq(2, $rB['destination']['id'], 'Test 9: Rank 2 is B');
+assert_eq(36, $rB['match_percentage'], 'Test 9: B match %');
+assert_close(0.3560, $rB['final_score'], 0.001, 'Test 9: B final_score');
+assert_eq(['Matches your interest in T1', 'Popular with visitors'], $rB['reasons'], 'Test 9: B reasons');
+
+assert_eq(3, $rC['destination']['id'], 'Test 9: Rank 3 is C');
+assert_eq(31, $rC['match_percentage'], 'Test 9: C match %');
+assert_close(0.3118, $rC['final_score'], 0.001, 'Test 9: C final_score');
+assert_eq(['October is one of its most visited months', 'Fits your budget'], $rC['reasons'], 'Test 9: C reasons');
+
 echo "\n=========================\n";
 echo "PASSED: {$passed}\n";
 echo "FAILED: {$failed}\n";
