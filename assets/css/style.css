@@ -696,6 +696,19 @@ body {
     margin-right: 9px;
 }
 
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.auth-wrapper {
+    flex: 1;
+    min-height: 0;
+}
+
+.hero {
+    flex: 1;
+}
+
 @media (max-width: 768px) {
     .hero {
         background-position: 60% center;
