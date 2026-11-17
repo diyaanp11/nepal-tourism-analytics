@@ -48,10 +48,12 @@ if (!function_exists('image_src')) {
         if ($value === null || trim($value) === '') {
             return asset('img/placeholder.svg');
         }
-        if (preg_match('#^https?://#i', $value)) {
-            return $value;
+        // Make the value safe inside an HTML attribute
+        $safe = str_replace(['"', "'", '<', '>', ' '], ['%22', '%27', '%3C', '%3E', '%20'], trim($value));
+        if (preg_match('#^https?://#i', $safe)) {
+            return $safe;
         }
-        return url($value);
+        return url($safe);
     }
 }
 

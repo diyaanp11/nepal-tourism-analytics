@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\Auth;
-use App\Core\Session;
-use App\Core\View;
 
 final class DashboardController
 {
@@ -13,23 +11,18 @@ final class DashboardController
     {
         Auth::requireAuth();
 
-        $role = (string)Auth::role();
-
+        $role = Auth::role();
         if ($role === 'admin') {
             redirect('admin/dashboard');
         }
         if ($role === 'researcher') {
             redirect('researcher/dashboard');
         }
+        if ($role === 'tourist') {
+            redirect('tourist/dashboard');
+        }
 
-        $nextPhase = 'Phase 6 — Recommendations & Favourites';
-
-        $title   = 'Dashboard';
-        $content = View::render('dashboard.index', [
-            'role'      => $role,
-            'name'      => (string)Session::get('user_name'),
-            'nextPhase' => $nextPhase,
-        ]);
-        require BASE_PATH . '/app/Views/layouts/main.php';
+        http_response_code(403);
+        exit('403 Forbidden');
     }
 }

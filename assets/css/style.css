@@ -906,3 +906,29 @@ body {
         display: none !important;
     }
 }
+
+/* ---------- Landing Page Hero Buttons ---------- */
+.hero-buttons .btn-signup {
+    background-color: var(--color-gold);
+    color: var(--color-dark-green);
+    border: 2px solid var(--color-gold);
+    transition: all 0.3s ease;
+}
+.hero-buttons .btn-signup:hover {
+    background-color: transparent;
+    color: var(--color-gold);
+    box-shadow: 0 0 15px rgba(213, 164, 94, 0.4);
+}
+
+.hero-buttons .btn-login {
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+.hero-buttons .btn-login:hover {
+    background-color: #ffffff;
+    color: var(--color-dark-green);
+    border-color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}

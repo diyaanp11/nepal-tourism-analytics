@@ -79,7 +79,6 @@ final class DestinationController
         
         $description = trim($_POST['description'] ?? '');
         
-        // Validate Cost
         $rawCost = $_POST['avg_cost_npr'] ?? '0';
         if (!is_numeric($rawCost)) {
             flash('error', 'Cost must be a valid number.');
@@ -91,7 +90,6 @@ final class DestinationController
             redirect('admin/destinations/edit/' . $id);
         }
 
-        // Validate Lat/Lng
         $rawLat = $_POST['latitude'] ?? '';
         $lat = null;
         if ($rawLat !== '') {
@@ -114,7 +112,6 @@ final class DestinationController
 
         $types = $_POST['types'] ?? [];
 
-        // Fetch current data
         $stmt = $pdo->prepare("SELECT region_id, image, status FROM destinations WHERE id = ?");
         $stmt->execute([$id]);
         $currentData = $stmt->fetch();
@@ -122,7 +119,6 @@ final class DestinationController
         $status = $currentData['status'];
         $oldImage = $currentData['image'];
 
-        // Handle Region
         $regionId = $currentRegionId;
         $newRegionName = trim($_POST['new_region'] ?? '');
         $regionToCreate = null;
@@ -140,7 +136,6 @@ final class DestinationController
             }
         }
 
-        // Handle Image
         $removeImage = isset($_POST['remove_image']) && $_POST['remove_image'] === '1';
         $imageValue = $oldImage;
         $newImagePath = null;
@@ -192,7 +187,6 @@ final class DestinationController
             $imageValue = null;
         }
 
-        // Validation checks before database writes
         if ($status === 'active') {
             if ((!$regionId && !$regionToCreate) || $avgCost <= 0 || empty($types)) {
                 flash('error', 'Active destinations require a region, a cost > 0, and at least one type.');
@@ -219,7 +213,6 @@ final class DestinationController
 
             $pdo->commit();
 
-            // Success: Now delete old file if we replaced it
             if ($oldImagePath && is_file($oldImagePath)) {
                 if ($newImagePath || $removeImage || ($imageValue !== $oldImage)) {
                     unlink($oldImagePath);
@@ -228,8 +221,6 @@ final class DestinationController
             flash('success', 'Destination updated successfully.');
         } catch (\Exception $e) {
             $pdo->rollBack();
-
-            // Failure: Delete the newly uploaded file to avoid orphans, keep the old one
             if ($newImagePath && is_file($newImagePath)) {
                 unlink($newImagePath);
             }
@@ -258,12 +249,14 @@ final class DestinationController
                 redirect('admin/destinations');
             }
             $newStatus = 'active';
+            $stmt = $pdo->prepare("UPDATE destinations SET status = ?, activated_at = NOW() WHERE id = ?");
+            $stmt->execute([$newStatus, $id]);
         } else {
             $newStatus = 'inactive';
+            $stmt = $pdo->prepare("UPDATE destinations SET status = ? WHERE id = ?");
+            $stmt->execute([$newStatus, $id]);
         }
 
-        $stmt = $pdo->prepare("UPDATE destinations SET status = ? WHERE id = ?");
-        $stmt->execute([$newStatus, $id]);
         flash('success', 'Destination status changed to ' . $newStatus);
         redirect('admin/destinations');
     }
