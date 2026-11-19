@@ -1,12 +1,16 @@
+# Local config with passwords
 config/config.local.php
+
+# User uploads
+assets/uploads/*
+!assets/uploads/.gitkeep
+
+# Storage logs and imports
 storage/imports/*
 !storage/imports/.gitkeep
 storage/logs/*
 !storage/logs/.gitkeep
-assets/uploads/*
-!assets/uploads/.gitkeep
+
+# OS files
 .DS_Store
 Thumbs.db
-*.swp
-.idea/
-.vscode/
