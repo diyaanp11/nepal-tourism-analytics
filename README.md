@@ -49,7 +49,6 @@ The system features 5 algorithms implemented from scratch and mathematically ver
 
 ## 📂 Folder Structure
 nepal-tourism-analytics/
-
 ├── app/
 │   ├── Controllers/    # Admin, Researcher, Tourist, and Auth controllers
 │   ├── Core/           # Router, Database, Session, CSRF, Auth
