@@ -49,6 +49,7 @@ The system features 5 algorithms implemented from scratch and mathematically ver
 
 ## 📂 Folder Structure
 nepal-tourism-analytics/
+```text
 ├── app/
 │   ├── Controllers/    # Admin, Researcher, Tourist, and Auth controllers
 │   ├── Core/           # Router, Database, Session, CSRF, Auth
@@ -61,6 +62,7 @@ nepal-tourism-analytics/
 ├── storage/            # Logs and CSV imports
 ├── tests/              # CLI Analytics Tests
 └── index.php           # Front Controller
+```
 
 ## 🚀 Installation (XAMPP)
 
