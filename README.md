@@ -67,7 +67,7 @@ nepal-tourism-analytics/
 ## 🚀 Installation (XAMPP)
 
 1. **Clone the repository** into your XAMPP `htdocs` folder:
-   git clone https://github.com/YOUR_USERNAME/nepal-tourism-analytics.git nepal-tourism
+   git clone https://github.com/diyaanp11/nepal-tourism-analytics
 
 2. **Start Apache and MySQL in the XAMPP Control Panel.**
 3. **Database Setup**: Create a database named nepal_tourism in phpMyAdmin and import database/schema.sql.
